@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>旅程規劃 | Trip Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .japanese-dark-card {
+            background: #1E1E1E;
+            border: 1px solid #2D2D2D;
+            border-radius: 16px;
+        }
+        .nav-active {
+            color: #FFB7C5; /* 櫻花色 */
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #2D2D2D;
+        }
+        /* 登機證風格 */
+        .boarding-pass {
+            background: linear-gradient(135deg, #2D2D2D 0%, #1E1E1E 100%);
+            border-left: 4px dashed #FFB7C5;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Top Header & Countdown -->
+    <header class="p-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">東京 · 冬之旅</h1>
+                <p class="text-xs text-gray-500 mt-1">2024.12.20 - 2024.12.25</p>
+            </div>
+            <div class="japanese-dark-card px-4 py-2 text-center">
+                <span class="text-xs text-gray-400 block underline decoration-pink-500">Countdown</span>
+                <span class="text-xl font-bold text-pink-300">D-12</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Sections -->
+    <main id="app-content" class="px-4">
+        
+        <!-- 1. Schedule Section -->
+        <section id="sec-schedule">
+            <!-- Date Picker (Horizontal) -->
+            <div class="flex overflow-x-auto gap-4 hide-scrollbar mb-6 py-2">
+                <div class="flex-none w-14 h-20 japanese-dark-card flex flex-col items-center justify-center border-pink-500/50 border-2">
+                    <span class="text-xs text-gray-400">12/20</span>
+                    <span class="text-lg font-bold">Fri</span>
+                </div>
+                <div class="flex-none w-14 h-20 japanese-dark-card flex flex-col items-center justify-center opacity-50">
+                    <span class="text-xs text-gray-400">12/21</span>
+                    <span class="text-lg font-bold">Sat</span>
+                </div>
+                <div class="flex-none w-14 h-20 japanese-dark-card flex flex-col items-center justify-center opacity-50">
+                    <span class="text-xs text-gray-400">12/22</span>
+                    <span class="text-lg font-bold">Sun</span>
+                </div>
+                <div class="flex-none w-14 h-20 japanese-dark-card flex flex-col items-center justify-center opacity-50">
+                    <span class="text-xs text-gray-400">12/23</span>
+                    <span class="text-lg font-bold">Mon</span>
+                </div>
+            </div>
+
+            <!-- Weather Card -->
+            <div class="japanese-dark-card p-4 mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <i class="fas fa-cloud-sun text-3xl text-yellow-500"></i>
+                    <div>
+                        <p class="text-sm">東京都 晴時多雲</p>
+                        <p class="text-xs text-gray-500">8°C / 12°C</p>
+                    </div>
+                </div>
+                <button class="text-xs text-pink-400">更新</button>
+            </div>
+
+            <!-- Timeline -->
+            <div class="relative timeline-line space-y-6">
+                <!-- Item 1 (Transport) -->
+                <div class="relative pl-12">
+                    <div class="absolute left-3.5 top-1 w-3.5 h-3.5 bg-blue-500 rounded-full border-4 border-gray-900"></div>
+                    <div class="japanese-dark-card p-4" onclick="showModal('detail')">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-bold text-blue-400">交通 09:30</span>
+                                <h3 class="text-sm font-medium mt-1">成田機場快線 Skyliner</h3>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-600 text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 (Food) -->
+                <div class="relative pl-12">
+                    <div class="absolute left-3.5 top-1 w-3.5 h-3.5 bg-orange-500 rounded-full border-4 border-gray-900"></div>
+                    <div class="japanese-dark-card p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-bold text-orange-400">美食 12:30</span>
+                                <h3 class="text-sm font-medium mt-1">築地市場壽司大</h3>
+                                <p class="text-xs text-gray-500 mt-1">備註：需現場排隊約 60 分鐘</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 (Attraction) -->
+                <div class="relative pl-12">
+                    <div class="absolute left-3.5 top-1 w-3.5 h-3.5 bg-green-500 rounded-full border-4 border-gray-900"></div>
+                    <div class="japanese-dark-card p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-bold text-green-400">景點 15:00</span>
+                                <h3 class="text-sm font-medium mt-1">淺草寺 雷門</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Bookings Section (Initially Hidden) -->
+        <section id="sec-bookings" class="hidden">
+            <h2 class="text-lg font-bold mb-4">預訂憑證</h2>
+            
+            <!-- Flight Card -->
+            <div class="boarding-pass p-4 rounded-r-xl mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-bold tracking-widest uppercase">Boarding Pass</span>
+                    <i class="fas fa-plane text-pink-300"></i>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-2xl font-bold">TPE</p>
+                        <p class="text-xs text-gray-400">Taipei</p>
+                    </div>
+                    <div class="text-center px-4 flex-1">
+                        <div class="border-b border-gray-600 mb-1"></div>
+                        <p class="text-[10px] text-gray-500">JX800</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold">NRT</p>
+                        <p class="text-xs text-gray-400">Tokyo</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accommodation Card -->
+            <div class="japanese-dark-card overflow-hidden mb-4">
+                <div class="h-32 bg-gray-700 bg-[url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&q=80&w=400')] bg-cover"></div>
+                <div class="p-4">
+                    <h3 class="font-bold">新宿格拉斯麗酒店</h3>
+                    <div class="grid grid-cols-2 gap-2 mt-2 text-xs text-gray-400">
+                        <p><i class="far fa-calendar-check mr-1"></i> In: 12/20 15:00</p>
+                        <p><i class="far fa-calendar-times mr-1"></i> Out: 12/23 11:00</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-800 flex justify-between items-center">
+                        <span class="text-sm text-gray-300">分攤金額</span>
+                        <span class="font-bold text-pink-300">NT$ 4,500 / 人</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIN Protection Mockup -->
+            <button onclick="checkPin()" class="w-full py-3 border border-dashed border-gray-600 rounded-xl text-gray-500 text-sm">
+                <i class="fas fa-lock mr-2"></i> 點擊解鎖隱私憑證 (PIN: 007)
+            </button>
+        </section>
+
+        <!-- 3. Expense Section (Initially Hidden) -->
+        <section id="sec-expense" class="hidden">
+            <div class="japanese-dark-card p-6 mb-6 bg-gradient-to-br from-gray-800 to-black">
+                <p class="text-xs text-gray-400 mb-1">總支出概覽 (TWD估算)</p>
+                <h2 class="text-3xl font-bold text-white">$ 12,480</h2>
+                <div class="flex gap-4 mt-4 text-xs">
+                    <div class="text-blue-300">JP¥ 45,000</div>
+                    <div class="text-green-300">匯率: 0.215</div>
+                </div>
+            </div>
+
+            <!-- Add Expense Button -->
+            <button class="w-full bg-pink-500 text-white py-3 rounded-xl font-bold mb-6">
+                <i class="fas fa-plus mr-2"></i> 新增記帳
+            </button>
+
+            <!-- Expense List -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center p-3 japanese-dark-card">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center text-orange-500">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">一蘭拉麵</p>
+                            <p class="text-[10px] text-gray-500">付款人: 小明 · 均分</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-bold">JP¥ 1,200</p>
+                        <p class="text-[10px] text-gray-500">≈ NT$ 258</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Planning Section -->
+        <section id="sec-planning" class="hidden">
+            <h2 class="text-lg font-bold mb-4">待辦事項</h2>
+            <div class="space-y-3">
+                <div class="japanese-dark-card p-4 flex items-center gap-3">
+                    <input type="checkbox" class="w-5 h-5 rounded accent-pink-500">
+                    <span class="text-sm">購買 Visit Japan Web 保險</span>
+                    <span class="ml-auto text-[10px] bg-gray-800 px-2 py-1 rounded text-gray-400">全體</span>
+                </div>
+                <div class="japanese-dark-card p-4 flex items-center gap-3">
+                    <input type="checkbox" class="w-5 h-5 rounded accent-pink-500" checked>
+                    <span class="text-sm line-through text-gray-600">更換日幣現金</span>
+                    <span class="ml-auto text-[10px] bg-pink-500/10 px-2 py-1 rounded text-pink-400">小明</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#1A1A1A] border-t border-gray-800 px-6 py-3 flex justify-between items-center z-50">
+        <button onclick="switchTab('schedule', this)" class="nav-active flex flex-col items-center gap-1">
+            <i class="fas fa-calendar-day text-lg"></i>
+            <span class="text-[10px]">行程</span>
+        </button>
+        <button onclick="switchTab('bookings', this)" class="text-gray-500 flex flex-col items-center gap-1">
+            <i class="fas fa-ticket-alt text-lg"></i>
+            <span class="text-[10px]">預訂</span>
+        </button>
+        <button onclick="switchTab('expense', this)" class="text-gray-500 flex flex-col items-center gap-1">
+            <i class="fas fa-wallet text-lg"></i>
+            <span class="text-[10px]">記帳</span>
+        </button>
+        <button onclick="switchTab('planning', this)" class="text-gray-500 flex flex-col items-center gap-1">
+            <i class="fas fa-clipboard-list text-lg"></i>
+            <span class="text-[10px]">清單</span>
+        </button>
+        <button onclick="switchTab('members', this)" class="text-gray-500 flex flex-col items-center gap-1">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-[10px]">成員</span>
+        </button>
+    </nav>
+
+    <!-- Simple PIN Modal Mockup -->
+    <div id="pin-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] hidden">
+        <div class="japanese-dark-card p-8 w-64 text-center">
+            <p class="mb-4">輸入安全碼 (007)</p>
+            <input type="password" id="pin-input" class="w-full bg-gray-800 border-none rounded-lg p-2 text-center text-xl tracking-widest mb-4">
+            <div class="flex gap-2">
+                <button onclick="closePin()" class="flex-1 text-gray-500">取消</button>
+                <button onclick="verifyPin()" class="flex-1 text-pink-400 font-bold">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, el) {
+            // Hide all sections
+            const sections = ['schedule', 'bookings', 'expense', 'planning'];
+            sections.forEach(s => {
+                const section = document.getElementById('sec-' + s);
+                if (section) section.classList.add('hidden');
+            });
+
+            // Show selected section
+            const target = document.getElementById('sec-' + tabId);
+            if (target) target.classList.remove('hidden');
+
+            // Update Nav UI
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(btn => btn.classList.remove('nav-active', 'text-gray-500'));
+            navButtons.forEach(btn => btn.classList.add('text-gray-500'));
+            el.classList.add('nav-active');
+            el.classList.remove('text-gray-500');
+
+            // Scroll to top
+            window.scrollTo(0,0);
+        }
+
+        function checkPin() {
+            document.getElementById('pin-modal').classList.remove('hidden');
+        }
+
+        function closePin() {
+            document.getElementById('pin-modal').classList.add('hidden');
+        }
+
+        function verifyPin() {
+            const pin = document.getElementById('pin-input').value;
+            if(pin === '007') {
+                alert('解鎖成功！這裡是隱私內容...');
+                closePin();
+            } else {
+                alert('代碼錯誤');
+            }
+        }
+    </script>
+</body>
+</html>
